@@ -1,0 +1,11 @@
+{
+   "protocol": "http",
+   "server": "CMARTIN-5420",
+   "requester": "MagicScripts/MGrqispi.dll",
+   "appname": "mgweb",
+   "LogClientSequenceForActivityMonitor": "N",
+   "InternalLogLevel": "",
+   "InternalLogSync": "Message",
+   "DisplayGenericError": "N",
+   "FirstHTTPRequestTimeout": "5"
+}

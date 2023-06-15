@@ -1,0 +1,51 @@
+version: '3'
+services:
+  appserver:
+    build:
+      context: .
+      dockerfile: DockerfileAppserverDeveloper
+      args:
+        APPSERVER_PARENT_IMAGE: ${APPSERVER_PARENT_IMAGE}
+        XPA_DOCKER_REPO: ${XPA_DOCKER_REPO}
+        PROJECT_NAME: ${PROJECT_NAME}
+        DEPLOY_FOLDER: ${DEPLOY_FOLDER}
+        INSTALL_PYTHON: ${INSTALL_PYTHON}
+        INSTALL_MYSQL: ${INSTALL_MYSQL}
+        INSTALL_POSTGRESQL: ${INSTALL_POSTGRESQL}
+        INSTALL_MSSQLSERVER: $(INSTALL_MSSQLSERVER)
+        INSTALL_UNIXODBC: ${INSTALL_UNIXODBC}
+        INSTALL_FREETDS: ${INSTALL_FREETDS}
+        MYSQL_ODBC_PACKAGE: ${MYSQL_ODBC_PACKAGE}
+        POSTGRESQL_PACKAGE: ${POSTGRESQL_PACKAGE}
+        MSSQLSERVER_PACKAGE: ${MSSQLSERVER_PACKAGE}
+        FREETDS_PACKAGE: ${FREETDS_PACKAGE}
+    image: ${XPA_DEV_APPSERVER_IMAGE}:${XPA_DEV_IMG_VERSION}
+    networks:
+        xpanw:
+            aliases:
+                - xpaappserver
+  webserver:
+    build:
+      context: .
+      dockerfile: DockerfileWebserverDeveloper
+      args:
+        WEBSERVER_PARENT_IMAGE: ${WEBSERVER_PARENT_IMAGE}
+        XPA_DOCKER_REPO: ${XPA_DOCKER_REPO}
+        PROJECT_NAME: ${PROJECT_NAME}
+        DEPLOY_FOLDER: ${DEPLOY_FOLDER}
+        COPY_WWW: ${COPY_WWW}
+        WWW_SOURCE_FOLDER: ${WWW_SOURCE_FOLDER}
+        WWW_TARGET_FOLDER: ${WWW_TARGET_FOLDER}
+    image: ${XPA_DEV_WEBSERVER_IMAGE}:${XPA_DEV_IMG_VERSION}
+    container_name: webserver_container
+    depends_on:
+     - "appserver"
+    networks:
+        xpanw:
+            aliases:
+                - xpawebserver
+networks:
+  xpanw:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"

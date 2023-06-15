@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: containerdeploy-xpanw
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/containerdeploy-xpanw: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/containerdeploy-xpanw: "true"

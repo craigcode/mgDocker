@@ -1,0 +1,86 @@
+ARG APPSERVER_PARENT_IMAGE
+ARG XPA_DOCKER_REPO
+
+FROM ${XPA_DOCKER_REPO}:${APPSERVER_PARENT_IMAGE}
+
+ARG PROJECT_NAME
+ENV ECF_LOCATION=${PROJECT_NAME}.ecf
+
+USER ${USER}
+
+ARG DEPLOY_FOLDER
+COPY ${DEPLOY_FOLDER}app .
+
+RUN ./process.sh > process.log 
+
+USER root
+
+# MySQL
+ARG INSTALL_MYSQL
+ARG MYSQL_ODBC_PACKAGE
+RUN if [ "$INSTALL_MYSQL" = "Y" ]  ; then \
+	yum install -y ${MYSQL_ODBC_PACKAGE} ; \
+fi
+
+# PostgreSQL
+ARG INSTALL_POSTGRESQL
+ARG POSTGRESQL_PACKAGE
+RUN if [ "$INSTALL_POSTGRESQL" = "Y" ]  ; then \
+	yum install -y ${POSTGRESQL_PACKAGE} && \
+	yum install -y postgresql-server && \
+	cp -r /usr/pgsql-11/lib/* /home/xpadocker/lib/ ; \
+fi
+
+#RUN yum install -y postgresql15-server
+#RUN cp -r /usr/pgsql-15/lib/* /home/xpadocker/lib/
+
+# MS SQL Server
+ARG INSTALL_MSSQLSERVER
+ARG MSSQLSERVER_PACKAGE
+RUN if [ "$INSTALL_MSSQLSERVER" = "Y" ]  ; then \
+	curl ${MSSQLSERVER_PACKAGE} > /etc/yum.repos.d/mssql-release.repo && \
+	yum search odbc && \
+	yum search msodbcsql17 && \
+	ENV ACCEPT_EULA=Y && \
+	yum install -y msodbcsql17 ; \ 
+fi
+
+# FreeTDS ODBC
+ARG INSTALL_FREETDS
+ARG FREETDS_PACKAGE
+RUN if [ "$INSTALL_FREETDS" = "Y" ]  ; then \
+	yum install -y ${FREETDS_PACKAGE} && \
+	yum install -y freetds ; \ 
+fi
+
+
+# UnixODBC
+ARG INSTALL_UNIXODBC
+RUN if [ "$INSTALL_UNIXODBC" = "Y" ]  ; then \
+	yum install -y unixODBC && \
+	yum install -y unixODBC-devel && \
+	cp -r /usr/lib64/* /home/xpadocker/lib/ ; \
+fi
+
+#PYTHON
+ARG INSTALL_PYTHON
+RUN if [ "$INSTALL_PYTHON" = "Y" ]  ; then \
+	yum update -y && \
+	yum install -y python3 && \
+	dnf install -y gcc && \
+	yum install -y gcc-c++ && \
+	yum install -y python3-devel && \
+	yum install -y python3-pip && \
+	pip3 install flask && \
+	pip3 install sqlalchemy;\ 
+fi
+
+# Copy Assets for MAGIC ODBC
+COPY ${DEPLOY_FOLDER}odbc.ini /etc/odbc.ini
+COPY ${DEPLOY_FOLDER}mgenv ./etc/mgenv
+COPY ${DEPLOY_FOLDER}MAGIC.INI ./etc/MAGIC.INI
+
+USER ${USER}
+
+#CMD sleep infinity
+ENTRYPOINT entrypoint.sh    # entrypoint.sh exists in base image

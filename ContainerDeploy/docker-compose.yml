@@ -1,0 +1,57 @@
+version: '3'
+services:
+  broker:
+    image: ${XPA_DOCKER_REPO}:${BROKER_BASE_IMAGE}
+    container_name: broker_container
+    networks:
+        xpanw:
+            aliases:
+                - xpabroker
+  appserver:
+    build:
+      context: .
+      dockerfile: DockerfileAppserverDeploy
+      args:
+        APPSERVER_PARENT_IMAGE: ${APPSERVER_PARENT_IMAGE}
+        XPA_DEV_IMG_VERSION: ${XPA_DEV_IMG_VERSION}
+        ADDITIONAL_INI: ${ADDITIONAL_INI}
+        LICENSE_FILE: ${LICENSE_FILE}
+    image: ${XPA_DEV_APPSERVER_IMAGE}:${XPA_DEV_IMG_VERSION}
+    container_name: appserver_container
+    volumes:
+      - ${BASE_WEB_CLIENT_CACHE}:/home/xpadocker/Web_Client_Cache
+      - ${GENERAL_ERROR_LOG}:/home/xpadocker/logs
+    depends_on:
+      - "broker"
+    networks:
+        xpanw:
+            aliases:
+                - xpaappserver
+  webserver:
+    build:
+      context: .
+      dockerfile: DockerfileWebserverDeploy
+      args:
+        WEBSERVER_PARENT_IMAGE: ${WEBSERVER_PARENT_IMAGE}
+        EXTERNAL_IP_ADDR: ${EXTERNAL_IP_ADDR}
+        EXTERNAL_PORT: ${EXTERNAL_PORT}
+        XPA_DEV_IMG_VERSION: ${XPA_DEV_IMG_VERSION}
+        REQUESTER_ALIAS: ${REQUESTER_ALIAS}
+    image: ${XPA_DEV_WEBSERVER_IMAGE}:${XPA_DEV_IMG_VERSION}
+    container_name: webserver_container
+    ports:
+      - "${EXTERNAL_PORT}:80"
+    volumes:
+     - ${BASE_WEB_CLIENT_CACHE}:/home/xpadocker/Web_Client_Cache
+    depends_on:
+     - "broker"
+     - "appserver"
+    networks:
+        xpanw:
+            aliases:
+                - xpawebserver
+networks:
+  xpanw:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"

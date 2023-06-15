@@ -1,0 +1,57 @@
+#
+# Magic Environment file
+# 
+# To comment a line, add a '#' in the first column
+# 
+#
+
+MAGIC_HOME=/home/xpadocker
+MAGIC_XPA_HOME=$MAGIC_HOME
+
+# Magic DBMS gateways
+MAGIC_DB_4_DRIVER=$MAGIC_HOME/bin/mgmysql
+#MAGIC_DB_7_DRIVER=$MAGIC_HOME/bin/mgdb400
+MAGIC_DB_10_DRIVER=$MAGIC_HOME/bin/mgsqlite
+MAGIC_DB_11_DRIVER=$MAGIC_HOME/bin/mglocal
+MAGIC_DB_12_DRIVER=$MAGIC_HOME/bin/mgpostgresql
+#MAGIC_DB_14_DRIVER=$MAGIC_HOME/bin/mgoracle11
+#MAGIC_DB_17_DRIVER=$MAGIC_HOME/bin/mgeac
+#MAGIC_DB_19_DRIVER=$MAGIC_HOME/bin/mgdb2
+MAGIC_DB_20_DRIVER=$MAGIC_HOME/bin/mgodbc
+MAGIC_DB_22_DRIVER=$MAGIC_HOME/bin/mgmemory
+MAGIC_DB_23_DRIVER=$MAGIC_HOME/bin/mgsqlserver
+
+# INI Files
+MGENV=$MAGIC_HOME/etc/MAGIC.INI
+MGREQENV=$MAGIC_HOME/etc/MGREQ.INI
+
+# User procedure
+myproc=$MAGIC_HOME/userproc/myproc
+myudf=$MAGIC_HOME/userproc/myudf
+
+# User procedure for AS/400 programs and commands
+#MGEAC32=$MAGIC_HOME/bin/mgeac
+#mgeac32=$MAGIC_HOME/bin/mgeac
+
+# Websphere MQ - UDP
+WMQseriesS=$MAGIC_HOME/bin/mgmqseries_s
+WMQseriesC=$MAGIC_HOME/bin/mgmqseries_c
+
+# Korean language support
+#MGLOCAL=$MAGIC_HOME/language/mglocal.kor
+
+# Host specific Values
+AWK=awk
+
+# Directory for temporary files
+TMPDIR=$MAGIC_HOME/tmp
+
+# Settings for Oracle DBMS
+#ORACLE_HOME=
+#ORACLE_SID=
+
+# JAVA_HOME - needed by GigaSpaces and Systinet
+# needs to point to root directory of the Java JDK installation
+# for example : JAVA_HOME=/opt/java/jdk_1.8
+JAVA_HOME=JAVAHOME
+
