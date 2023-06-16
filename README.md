@@ -1,8 +1,8 @@
 # mgDocker
 
-Copy of my demo docker compose config minus license, password and themeforest html template.
+Magic xpa 4.9 docker-compose demo minus license, db passwords and themeforest html template.
 
-Will update.
+Will update with further config instructions.
 
 ## Build
 ```
