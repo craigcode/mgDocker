@@ -10,10 +10,10 @@ USER root
 RUN cd /home/${user}
 
 ARG PROJECT_NAME
-ARG REQUESTER_ALIAS
+#ARG REQUESTER_ALIAS
 RUN sed -i -e "s#\"server.*#\"server\": \"${EXTERNAL_IP_ADDR}:${EXTERNAL_PORT}\",#g" ${PROJECT_NAME}/assets/server-config.json
-RUN sed -i -e "s#\"requester.*#\"requester\": \"${REQUESTER_ALIAS}\",#g" ${PROJECT_NAME}/assets/server-config.json
-RUN sed -i -e "s#<Location /mgrequest049>.*#<Location /${REQUESTER_ALIAS}>#g" /etc/httpd/conf/httpd.conf
+#RUN sed -i -e "s#\"requester.*#\"requester\": \"${REQUESTER_ALIAS}\",#g" ${PROJECT_NAME}/assets/server-config.json
+#RUN sed -i -e "s#<Location /mgrequest049>.*#<Location /${REQUESTER_ALIAS}>#g" /etc/httpd/conf/httpd.conf
 
 RUN ./process.sh ${DOCKER_USER} \
 	&& rm -rf ${WEB_APPLICATION}

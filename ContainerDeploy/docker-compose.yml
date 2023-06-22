@@ -36,7 +36,7 @@ services:
         EXTERNAL_IP_ADDR: ${EXTERNAL_IP_ADDR}
         EXTERNAL_PORT: ${EXTERNAL_PORT}
         XPA_DEV_IMG_VERSION: ${XPA_DEV_IMG_VERSION}
-        REQUESTER_ALIAS: ${REQUESTER_ALIAS}
+        #REQUESTER_ALIAS: ${REQUESTER_ALIAS}
     image: ${XPA_DEV_WEBSERVER_IMAGE}:${XPA_DEV_IMG_VERSION}
     container_name: webserver_container
     ports:
